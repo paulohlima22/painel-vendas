@@ -1,6 +1,4 @@
 
-flask
+Flask
 yagmail
-pandas
-matplotlib
-gunicorn
+Werkzeug
