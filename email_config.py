@@ -1,3 +1,4 @@
-EMAIL_ADDRESS = "lokotodomundotemumpoco@gmail.com"
-EMAIL_PASSWORD = "mnyqftypydilsezx"
-email_destino = "phl.lhp@hotmail.com"
+
+# Configurações de e-mail
+email_remetente = 'seuemail@gmail.com'
+senha_app = 'SENHA_DE_APP_DO_GMAIL'

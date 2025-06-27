@@ -1,8 +1,10 @@
+
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import check_password_hash
 import users
-import yagmail
 import email_config
+import yagmail
+import os
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta'
@@ -16,13 +18,6 @@ def login():
             senha_hash = users.users[email]
             if check_password_hash(senha_hash, senha):
                 session['usuario'] = email
-
-                # Enviar e-mail ao logar
-                yag = yagmail.SMTP(email_config.email_remetente, email_config.senha_app)
-                assunto = "Login detectado no Painel de Vendas"
-                corpo = f"Usuário {email} acabou de logar com sucesso no sistema."
-                yag.send(email_config.email_destino, assunto, corpo)
-
                 return redirect(url_for('dashboard'))
         return "Credenciais inválidas. Tente novamente."
     return render_template('login.html')
@@ -39,7 +34,20 @@ def logout():
     session.pop('usuario', None)
     return redirect(url_for('login'))
 
+@app.route('/recuperar', methods=['GET', 'POST'])
+def recuperar_senha():
+    if request.method == 'POST':
+        email = request.form['email']
+        if email in users.users:
+            yag = yagmail.SMTP(email_config.email_remetente, email_config.senha_app)
+            assunto = "Recuperação de senha - Painel de Vendas"
+            corpo = f"Olá, {email}. Recebemos sua solicitação para recuperar a senha.\n\nSua senha não pode ser recuperada por segurança, mas você pode redefinir com o admin."
+            yag.send(to=email, subject=assunto, contents=corpo)
+            return "E-mail de recuperação enviado com sucesso!"
+        else:
+            return "E-mail não encontrado."
+    return render_template('recuperar.html')
+
 if __name__ == '__main__':
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
