@@ -1,5 +1,15 @@
+import json
+import os
+from werkzeug.security import generate_password_hash
 
-# Armazena os usuários e senhas criptografadas
-users = {
-    'admin': 'scrypt:32768:8:1$z8XlJJka7ZxTSCvG$ab917fb757994b55c680325e237bb0706662342ac7b79a74f9d7416391ada15ddfa62ece644b25372134569236e2e63b79d4522c1ae6a465286a4d7f2211659c'
-}
+USERS_FILE = 'users.json'
+
+def carregar_usuarios():
+    if os.path.exists(USERS_FILE):
+        with open(USERS_FILE, 'r') as f:
+            return json.load(f)
+    return {}
+
+def salvar_usuarios(usuarios):
+    with open(USERS_FILE, 'w') as f:
+        json.dump(usuarios, f, indent=4)

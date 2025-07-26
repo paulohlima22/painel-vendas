@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Senha</title>
+</head>
+<body>
+    <h2>Definir Nova Senha</h2>
+    {% with mensagens = get_flashed_messages() %}
+        {% if mensagens %}
+            <ul>
+            {% for msg in mensagens %}
+                <li style="color:red;">{{ msg }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <form method="POST">
+        <input type="hidden" name="email" value="{{ email }}">
+        <p><label>Nova Senha:</label><br>
+        <input type="password" name="nova_senha" required></p>
+
+        <p><label>Confirmar Nova Senha:</label><br>
+        <input type="password" name="confirmar_senha" required></p>
+
+        <p><button type="submit">Atualizar Senha</button></p>
+    </form>
+    <p><a href="{{ url_for('login') }}">Voltar ao login</a></p>
+</body>
+</html>

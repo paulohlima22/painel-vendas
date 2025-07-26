@@ -1,4 +1,4 @@
+import os
 
-# Configurações de e-mail
-email_remetente = 'seuemail@gmail.com'
-senha_app = 'SENHA_DE_APP_DO_GMAIL'
+EMAIL_USER = os.getenv('EMAIL_USER')
+EMAIL_PASS = os.getenv('EMAIL_PASS')

@@ -5,8 +5,8 @@
     <title>Painel</title>
 </head>
 <body>
-    <h2>Bem-vindo, {{ usuario }}!</h2>
-    <p>Você está logado com sucesso.</p>
-    <a href="{{ url_for('logout') }}">Sair</a>
+    <h2>Bem-vindo ao Painel</h2>
+    <p>Você está logado como <strong>{{ usuario }}</strong>.</p>
+    <p><a href="{{ url_for('logout') }}">Sair</a></p>
 </body>
 </html>
