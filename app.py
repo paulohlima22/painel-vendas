@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from werkzeug.security import check_password_hash, generate_password_hash
 import users
+import produtos
 import email_config
 import yagmail
 import os
@@ -30,7 +31,8 @@ def login():
 @app.route('/dashboard')
 def dashboard():
     if 'usuario' in session:
-        return render_template('dashboard.html', usuario=session['usuario'])
+        lista_produtos = produtos.carregar_produtos()
+        return render_template('dashboard.html', usuario=session['usuario'], produtos=lista_produtos)
     return redirect(url_for('login'))
 
 @app.route('/logout')
@@ -47,7 +49,8 @@ def recuperar_senha():
         if email in usuarios:
             try:
                 yag = yagmail.SMTP(email_config.EMAIL_USER, email_config.EMAIL_PASS)
-                yag.send(email, 'Recuperação de senha', f'Clique aqui para redefinir: https://seu-app.onrender.com/nova_senha?email={email}')
+                link = f'https://painel-vendas-qktv.onrender.com/nova_senha?email={email}'
+                yag.send(email, 'Recuperação de senha', f'Clique no link para redefinir sua senha: {link}')
                 flash('Email para recuperação enviado.')
             except Exception as e:
                 flash(f"Erro ao enviar email: {e}")
@@ -74,6 +77,19 @@ def nova_senha():
         else:
             flash("Email não encontrado.")
     return render_template('nova_senha.html', email=email_query)
+
+@app.route('/cadastrar_produto', methods=['GET', 'POST'])
+def cadastrar_produto():
+    if 'usuario' not in session:
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        nome = request.form['nome']
+        preco = request.form['preco']
+        descricao = request.form['descricao']
+        produtos.adicionar_produto(nome, preco, descricao)
+        flash('Produto cadastrado com sucesso!')
+        return redirect(url_for('dashboard'))
+    return render_template('cadastrar_produto.html')
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
