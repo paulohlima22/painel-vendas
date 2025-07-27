@@ -7,7 +7,7 @@ import yagmail
 import os
 
 app = Flask(__name__)
-app.secret_key = os.getenv("SECRET_KEY", "chave_super_secreta")
+app.secret_key = os.getenv("SECRET_KEY", "chave_super_secreta")  # Use variável de ambiente para produção
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
@@ -51,7 +51,7 @@ def recuperar_senha():
                 yag = yagmail.SMTP(email_config.EMAIL_USER, email_config.EMAIL_PASS)
                 link = f'https://painel-vendas-qktv.onrender.com/nova_senha?email={email}'
                 yag.send(email, 'Recuperação de senha', f'Clique no link para redefinir sua senha: {link}')
-                flash('Email para recuperação enviado.')
+                flash('Email para recuperação enviado. Verifique sua caixa de entrada.')
             except Exception as e:
                 flash(f"Erro ao enviar email: {e}")
         else:
@@ -86,7 +86,8 @@ def cadastrar_produto():
         nome = request.form['nome']
         preco = request.form['preco']
         descricao = request.form['descricao']
-        produtos.adicionar_produto(nome, preco, descricao)
+        link = request.form['link']  # Novo campo: link de venda
+        produtos.adicionar_produto(nome, preco, descricao, link)
         flash('Produto cadastrado com sucesso!')
         return redirect(url_for('dashboard'))
     return render_template('cadastrar_produto.html')
