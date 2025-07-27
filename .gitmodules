@@ -1,0 +1,3 @@
+[submodule \"painel-produto\"]
+    path = painel-produto
+    url = https://github.com/paulohlima22/painel-produto.git
