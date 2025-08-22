@@ -16,8 +16,8 @@ def salvar_usuarios(usuarios):
 
 # Código utilitário para terminal
 if __name__ == '__main__':
-    senha = input("Digite a nova senha: ")
-    email = input("Email do usuário: ")
+    senha = input("Phl290587# ")
+    email = input("phl.lhp@hotmail.com ")
     usuarios = carregar_usuarios()
     usuarios[email] = generate_password_hash(senha)
     salvar_usuarios(usuarios)
